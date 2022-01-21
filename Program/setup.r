@@ -1,6 +1,6 @@
 #setup script for phsophoprot
-packs = c("BiocManager", "readxl", "colorspace", "writexl", "ggplot2")
-bcpacks = c("limma", "GO.db", "topGO")
+packs = c("BiocManager", "ggplot2", "ggfortify")
+bcpacks = c("edgeR", )
 
 for (pack in packs) {
   if(!(requireNamespace(pack, quietly=TRUE))) {
