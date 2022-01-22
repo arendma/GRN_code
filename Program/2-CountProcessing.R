@@ -1,12 +1,12 @@
 # Script combindes read count data from different studies into one gene name based format and 
 # then jointly applies TMM and voom normalization of the raw count as implemented in the edgeR package
-source('dircreater.r')
-source('map55_53.R')
+source('deps/dircreater.r')
+source('deps/map55_53.R')
 library(edgeR)
 library(ggplot2)
 library(ggfortify)
 
-
+###PART 1 Data processing
 #load countfiles arma17
 load('../Data/arma17_trd.obj')
 colnames(arma17) <- paste(rep('am17X', ncol(arma17)), gsub('\\.', '_', colnames(arma17)), sep='')
@@ -43,8 +43,11 @@ RNalldge <- estimateDisp(RNalldge, RNalldesign, robust=TRUE)
 #voom normalization
 RNallv <- voom(RNalldge,RNalldesign,plot=F)
 summary(RNallv$E)
+## Export the voom normalized (log) read count table so we can work with it later
 me1519arma17_exp <- RNallv$E
 save(me1519arma17_exp, file='../Data/20191112me1915arma17_exp.obj')
+
+#### PART 2 inital QC analysis 
 #generate a light intensity annotation for each sample
 samplelight <- rep('LL', 158)
 samplelight[unlist(sapply(c('me19Xneg', 'me19X13', 'me15X12', 'me15X13', 'me15X14', 'me15X15', 'me15X16', 'me15X17', 'me15X18', 'me15X19', 'me15X2[[:digit:]]' ), grep, x=colnames(me1519arma17_exp)))] <- 'dark'
@@ -52,12 +55,13 @@ samplelight[unlist(sapply(c('am17X5', 'am17X6', 'am17X7', 'am17X8', 'am17X11', '
 samplelight <- factor(samplelight, levels = c('dark', 'LL', 'HL'))
 samplelight <- data.frame(samplelight)
 rownames(samplelight) <- colnames(me1519arma17_exp)
-
+##Create a PCA of samples
 pca1 <- prcomp(t(me1519arma17_exp))
 bp <- autoplot(pca1,  label=TRUE, shape=FALSE, label.size=1.5)
 dircreater('../Results/Bignet/me1519arma17ana')
 ggsave('../Results/Bignet/me1519arma17ana/pcawhole.pdf', bp)
 
+##Create a focussed PCA of our experiments
 # design labelst labels for arma17
 cultcond <- c(rep(c('HSM', 'HSM', 'HSM', 'Ac', 'Ac', 'Ac'), 7), rep(c('HSM_phot', 'HSM', 'HSM_phot', 'HSM'), each=3))
 lightcond <- c(rep('LL', 6), rep(c(rep('LL', 6),rep('HL',12)), 2), rep('HL',6), rep('LL',6))
@@ -77,6 +81,8 @@ pca3$x <- pca3$x[1:42,]
 ma17cond<- arma17cond[1:42,]
 bp3 <- autoplot(pca3, data= ma17cond, shape='cultcond', colour='timelight', size=7) + theme_bw() +theme(text=element_text(size=25))+ labs(colour='Light treatment + time', shape='Algae culture')
 ggsave('../Results/Bignet/me1519arma17ana/pcama17.pdf', bp3, height=8, width=12 ,useDingbats=FALSE)
+
+##Create a heat map of sample correlations
 library(amap)
 library(pheatmap)
 corm=cor(me1519arma17_exp)

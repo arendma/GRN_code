@@ -1,6 +1,6 @@
 #setup script for phsophoprot
-packs = c("BiocManager", "ggplot2", "ggfortify")
-bcpacks = c("edgeR", )
+packs = c("BiocManager", "ggplot2", "ggfortify", "amap", "pheatmap", "parallel", "elasticnet", "GeneNet", "igraph")
+bcpacks = c("edgeR", "GENIE3", "minet")
 
 for (pack in packs) {
   if(!(requireNamespace(pack, quietly=TRUE))) {
