@@ -1,6 +1,6 @@
 # Code to generate a Gener regulatory netowrk for Chlamydomonas reinhardtii
 
-The code included in the ../Program subfolder recreates teh gene regulatory network based on the read count data from 
+The code included in the ../Program subfolder recreates the gene regulatory network based on the read count data from 
 
 - *phot* Mutant sreen
 - acetate timeline
@@ -10,6 +10,7 @@ The code included in the ../Program subfolder recreates teh gene regulatory netw
 **ATTENTION: I did no test this code on other machines it was run in a R3.6.1 intallation**
 
 The code is currently not deterministic - so on each run due to steps that involve a ranodm number geneator it will lead to different results
+
 ## Steps
 
 ### 1. Setup
