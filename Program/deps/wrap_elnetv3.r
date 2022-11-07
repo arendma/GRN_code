@@ -7,7 +7,7 @@ wrap_elnet <- function (dat, resdir, thrsh, tfs=FALSE, parallel=FALSE, ...) {
   dircreater(resdir)
   reg_res <- data.frame()
   #predict all genes
-  if(tfs==FALSE) {
+  if(length(tfs)==1 && tfs==FALSE) {
   #serial
   if (parallel==1) {
     for (i in 1:length(rownames(dat))) {
@@ -43,7 +43,7 @@ wrap_elnet <- function (dat, resdir, thrsh, tfs=FALSE, parallel=FALSE, ...) {
   }
   }
   #With tf list as predictors
-  else {
+  else if(class(tfs)=="character") {
     if (parallel==1) {
       predictor<- dat[rownames(dat) %in% tfs,]
     for (i in 1:length(rownames(dat))) {
@@ -90,7 +90,7 @@ wrap_elnet <- function (dat, resdir, thrsh, tfs=FALSE, parallel=FALSE, ...) {
         }
       }
     }
-    }
+    } else {stop("tfs argument is either FALSE or a character vector of dat row indexes")}
   #Filter bad models
   relvarsort <- sort(unique(new_res$relvar))
   lost <- sum(relvarsort<thrsh)/length(relvarsort)
