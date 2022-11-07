@@ -2,7 +2,7 @@ wrap_genie3 <- function (dat, parallel, tfs=FALSE) {
   #takes a matrix of gene expression values and calculates genie 3 network for all gene combinations
   #gene names must be specified in rownames(data)
   library(GENIE3)
-  if (tfs!=FALSE) {
+  if (length(tfs)>1 && class(tfs)=="character") {
     if (parallel>1) {
       weightMat <- GENIE3(dat, regulators = tfs,  nCores=parallel, verbose=TRUE)
     }
@@ -11,7 +11,7 @@ wrap_genie3 <- function (dat, parallel, tfs=FALSE) {
     }
     else {stop('parallel must be a positive integer')}
   }
-  else {
+  else if(tfs==FALSE) {
     if (parallel>1) {
       weightMat <- GENIE3(dat, nCores=parallel, verbose=TRUE)
     }
@@ -19,7 +19,7 @@ wrap_genie3 <- function (dat, parallel, tfs=FALSE) {
       weightMat <- GENIE3(dat, verbose=TRUE)
     }
     else {stop('parallel must be a positive integer')}
-  }
+  } else {stop("tfs argument is either FALSE or a character vector of dat row indexes")}
   linkList <- getLinkList(weightMat)
   genie_all <- linkList
   
