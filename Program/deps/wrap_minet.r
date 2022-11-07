@@ -12,9 +12,9 @@ if (algo=='ARACNE') {
 else if(algo=='CLR') {
   net_all <- clr(mi_all)
 }
-if (tfs!=FALSE) {
+if (length(tfs)>1 && class(tfs)=="character") {
   net_all[rownames(net_all)[!(rownames(net_all)%in%tfs)],] <- 0
-}
+} else if(length(tfs)>1 || tfs!=FALSE) {stop("tfs argument is either FALSE or a character vector of dat row indexes")}
 
 g_ara <- graph.adjacency(net_all,weighted=T)
 a_edge <- get.data.frame(g_ara)

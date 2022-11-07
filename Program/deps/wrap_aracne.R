@@ -8,9 +8,9 @@ library(igraph)
 mi_all <- build.mim(t(dat),estimator="spearman")
 #mi_all <- mi_all[genes_to_use,genes_to_use]
 net_all <- aracne(mi_all)
-if (tfs!=FALSE) {
+if (length(tfs)>1 && class(tfs)=="character") {
   net_all[!(rownames(net_all)%in%tfs),] <- 0
-}
+} else if(length(tfs)>1 || tfs!=FALSE) {stop("tfs argument is either FALSE or a character vector of dat row indexes")}
 
 g_ara <- graph.adjacency(net_all,weighted=T)
 a_edge <- get.data.frame(g_ara)

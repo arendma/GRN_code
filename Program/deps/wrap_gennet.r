@@ -13,9 +13,9 @@ wrap_gennet <- function(dat, tfs=FALSE) {
   ggm_list <- data.frame(from=rownames(inferred.pcor)[net$node1],
                          to=rownames(inferred.pcor)[net$node2],
                          weight=net$pcor)
-  if (tfs!=FALSE) {
+  if (length(tfs)>1 && class(tfs)=="character") {
     ggm_list <- ggm_list[ggm_list$from %in% tfs,]
-  }
+  } else if(length(tfs)>1 || tfs!=FALSE) {stop("tfs argument is either FALSE or a character vector of dat row indexes")}
   
   #Taken from nooshins inferrence code but I don't now what g_rof_syn is (undeclared variable)
   #ggm_list$from <- tolower(as.character(g_orf_syn[ggm_list$from]))

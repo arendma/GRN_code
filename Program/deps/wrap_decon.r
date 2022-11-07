@@ -7,9 +7,9 @@ source("deps/deconvolution.r")
 cor_ds <- cor(t(dat), method='pearson')
 D <- Dpreprocess(cor_ds,NULL,NULL, silent) # second two arguments are not used in current version of nooshins code
 d<-D
-if (tfs!=FALSE) {
+if (length(tfs)>1 && class(tfs)=="character") {
 d[rownames(dat)[!(rownames(dat)%in% tfs)],] <- 0
-}
+} else if(length(tfs)>1 || tfs!=FALSE) {stop("tfs argument is either FALSE or a character vector of dat row indexes")}
 g_D <- graph.adjacency(d,weighted=T)
 d_edge <- get.data.frame(g_D)
 #Taken from nooshins inferrence code but I don't now what g_rof_syn is (undeclared variable)
