@@ -7,7 +7,7 @@ Silencing <- function(G)
   D <- diag((G - I) %*% G)
   
   c_inv <- try(solve(G),silent = F)
-  if (class(c_inv) == "try-error")
+  if (class(c_inv)[1] == "try-error")
     c_inv <- mpinv(G)
   
   S <- (G - I + diag(D)) %*% c_inv#solve(G)
