@@ -6,15 +6,15 @@ wrap_silenc <- function(dat, tfs=FALSE) {
   diag(cor_ds) <- 1
   aa <- matrix(rnorm(length(cor_ds),mean=0,sd=1),ncol=ncol(cor_ds),nrow=nrow(cor_ds))/100
   
-  if (tfs!=FALSE) {
+  if (length(tfs)>1 && class(tfs)=="character") {
     S <- Spreprocess(cor_ds+aa, tfs=NULL, nontfs=rownames(cor_ds)[!(rownames(cor_ds) %in% tfs)])
-  } else {
+  } else if(tfs==FALSE){
     S <- Spreprocess(cor_ds+aa,tfs=NULL,nontfs=NULL) # variable tfs was unused in current code made nontfs also unused since I didn't understand the usage see preprocess_silencing.r
-  }
+  } else {stop("tfs argument is either FALSE or a character vector of dat row indexes")}
   s<-S
   colnames(s) <- rownames(s)
   print(all(s[!(rownames(s) %in% tfs),]==0))
-  if (tfs!=FALSE) { # unnescessary since this is already done in the preprocess silencing step
+  if (length(tfs)>1 && class(tfs)=="character") { # unnescessary since this is already done in the preprocess silencing step
   s[!(rownames(s) %in% tfs),] <- 0
   }
   g_S <- graph.adjacency(s,weighted=T)
