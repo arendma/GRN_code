@@ -1,4 +1,4 @@
-# Code to generate a Gener regulatory netowrk for Chlamydomonas reinhardtii
+# Code to generate a Gene regulatory network for Chlamydomonas reinhardtii
 
 The code included in the ../Program subfolder recreates the gene regulatory network based on the read count data from 
 
