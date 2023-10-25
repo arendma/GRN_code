@@ -27,7 +27,7 @@ tfs <- tfs[tfs %in% rownames(gene_dat)]
 
 #Do elastic net regression analysis for each TF using all other TFs as predictors 
 #THIS STEP TAKES VERY LONG - RUN ON SERVER OR wITH MORE THEN 8 THREADS
-elnet_res <- wrap_elnet(gene_dat_median, resdir='../Results/Bignet/elnet/', thrsh=0, tfs=tfs,parallel=8)
+elnet_res <- wrap_elnet(gene_dat_median, resdir='../Results/Bignet/elnet/', thrsh=0.5, tfs=tfs,parallel=8)
 elnet_all <- elnet_res[,c('Gene.ID', 'predicted', 'rel.coeff')]
 colnames(elnet_all) <- c('from', 'to', 'weight' )
 elnet_all <- elnet_all[order(abs(elnet_all$weight), decreasing = TRUE),]

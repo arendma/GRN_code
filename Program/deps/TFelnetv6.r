@@ -55,11 +55,11 @@ TFelnet <- function(y, x, goi_n, resdir, intercept=FALSE, K=6, report=FALSE) {
   beta_lm <- predict(lm, s=cv_res['s', which.min(cv_res['cv',])], type='coefficients', mode ='fraction')
   x_lm <- predict(lm, newx= x, s=cv_res['s', which.min(cv_res['cv',])], type='fit', mode ='fraction')
   regulr2 <- function(obs, fit) {
-    return(1-(sum((obs-fit)^2))/var(obs))
+    return(1-(sum((obs-fit)^2)/sum((obs-mean(obs))^2)))
   }
   relvar <- regulr2(y,x_lm$fit)
   beta_lm_df <- data.frame(predicted = rep(goi_n, length(beta_lm$coefficients)), Gene.ID = names(beta_lm$coefficients), coefficients=beta_lm$coefficients, 
-                           Gene.Name = sapply(names(beta_lm$coefficients), gn_match, phyto_gn), relvar=rep(relvar, length(beta_lm$coefficients)), 
+                           relvar=rep(relvar, length(beta_lm$coefficients)), 
                            s=rep(cv_res['s', which.min(cv_res['cv',])], length(beta_lm$coefficients)), lambda=rep(cv_res['lambda', which.min(cv_res['cv',])], length(beta_lm$coefficients)),
                            cv=rep(cv_res['cv', which.min(cv_res['cv',])], length(beta_lm$coefficients)))
   beta_lm_df <- beta_lm_df[order(abs(beta_lm_df$coefficients), decreasing=TRUE),]
